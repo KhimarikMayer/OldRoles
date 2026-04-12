@@ -73,7 +73,6 @@ const cssStyles = `
     margin-left: 2px;
 }
 .removeButton_af3987 {
-    margin-left: -1px;
     margin-right: -4px;
 }
 .role__48c1c .roleCircle__4f569 {
