@@ -179,6 +179,23 @@ const cssStyles = `
 .member-perms {
 	gap: 4px;
 }
+.roleTag__9e177 {
+	background-color: var(--background-base-low) !important;
+	border-radius: 5px;
+	padding: 2px;
+}
+.roleDot__9e177 {
+	margin-right: 4px;
+}
+.roleDot__5d7c9,
+.roleDot__9e177 {
+	margin-left: 1px !important;
+}
+.role__5d7c9,
+.roleTag__9cd44 {
+	padding: 4px;
+	background-color: rgba(0, 0, 0, 0);
+}
 `;
 
 const settings = {
