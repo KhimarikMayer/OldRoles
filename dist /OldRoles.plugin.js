@@ -176,6 +176,9 @@ const cssStyles = `
 .addButton_af3987.showLabel_af3987 {
     padding-inline-start: 4px;
 }
+.member-perms {
+	gap: 4px;
+}
 `;
 
 const settings = {
