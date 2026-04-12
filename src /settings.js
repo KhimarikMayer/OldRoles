@@ -1,8 +1,8 @@
 const settings = {
     main: {
         enableBackground: {
-            name: "Фоновый цвет ролей",
-            note: "Добавляет полупрозрачный фон (opacity 0.153) к ролям",
+            name: "Background roles",
+            note: "Adds transparent background of roles (opacity 0.153)",
             initial: false
         }
     },
