@@ -191,6 +191,27 @@ const settings = {
     }
 };
 
+function loadSettings() {
+    try {
+        const saved = BdApi.loadData('OldRoles', 'settings');
+        if (saved) return Object.assign({}, settings.default, saved);
+    } catch(e) {}
+    return Object.assign({}, settings.default);
+}
+
+function saveSettings(settingsData) {
+    try {
+        BdApi.saveData('OldRoles', 'settings', settingsData);
+    } catch(e) {}
+}
+
+module.exports = {
+    config: settings,
+    default: settings.default,
+    load: loadSettings,
+    save: saveSettings
+};
+
 module.exports = class ColorfulRoleBorders {
     constructor() {
         this.roleSelector = '.role_af3987, .role__5d7c9, .roleTag__9e177, .tag__0e476';
