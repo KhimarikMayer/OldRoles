@@ -181,8 +181,8 @@ const cssStyles = `
 const settings = {
     main: {
         enableBackground: {
-            name: "Фоновый цвет ролей",
-            note: "Добавляет полупрозрачный фон (opacity 0.153) к ролям",
+            name: "Background roles",
+            note: "Adds transparent background of roles (opacity 0.153)",
             initial: false
         }
     },
@@ -223,7 +223,6 @@ getRoleColor(role) {
                         role.querySelector('[class*="roleColor"]') || 
                         role.querySelector('[class*="tagRoleColor"]');
     
-    // Обычные роли
     if (colorElement) {
         const color = window.getComputedStyle(colorElement).backgroundColor;
         if (color && color !== 'rgba(0, 0, 0, 0)') {
@@ -237,8 +236,7 @@ getRoleColor(role) {
         }
     }
     
-    // Градиентные роли
-const gradientElement = role.querySelector('[class*="twoColorGradient_e5de78"], [class*="gradientDotAnimation_e5de78"]');
+const gradientElement = role.querySelector('[class*="twoColorGradient"], [class*="gradientDotAnimation"]');
 if (gradientElement) {
     const computed = window.getComputedStyle(gradientElement);
     const color1 = computed.getPropertyValue('--custom-gradient-color-1').trim();
