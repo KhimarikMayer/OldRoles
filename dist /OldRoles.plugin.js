@@ -160,8 +160,8 @@ const cssStyles = `
     margin-left: 0;
 }
 .role__5d7c9 {
-    padding-top: 2px;
-    padding-bottom: 2px;
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
 }
 .linkIcon_ebf183[style*="1.5px"] {
     margin: 1px !important;
@@ -187,7 +187,6 @@ const cssStyles = `
 .roleDot__9e177 {
 	margin-right: 4px;
 }
-.roleDot__5d7c9,
 .roleDot__9e177 {
 	margin-left: 1px !important;
 }
