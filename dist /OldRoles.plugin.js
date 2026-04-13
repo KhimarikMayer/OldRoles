@@ -135,14 +135,7 @@ const cssStyles = `
 .role_af3987:has(.twoColorGradient_e5de78,.gradientDotAnimation_e5de78) .roleName_af3987 {
     margin-right: -1px;
 }
-.roleColor_b4b2c3,
-.roleDot__5d7c9 {
-    width: 12px;
-    height: 12px;
-}
 .tagRoleColor__0e476 {
-    width: 14px;
-    height: 14px;
     margin-left: -2px;
 }
 .tag__0e476:has(.tagRoleColor__0e476) .tagLabel__0e476 {
