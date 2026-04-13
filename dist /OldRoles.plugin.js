@@ -10,8 +10,9 @@ const react = BdApi.React;
 
 let FormSwitch;
 let styleId = "OldRolesCSS";
+let dynamicStyleElement = null;
 
-const cssStyles = `
+const baseCSS = `
 .role_af3987.pillButton_af3987,
 .role_af3987.pillButton_af3987:hover,
 .role_af3987.expandButton_af3987,
@@ -216,99 +217,108 @@ function saveSettings(settingsData) {
     } catch(e) {}
 }
 
-module.exports = {
-    config: settings,
-    default: settings.default,
-    load: loadSettings,
-    save: saveSettings
-};
-
 module.exports = class ColorfulRoleBorders {
     constructor() {
         this.roleSelector = '.role_af3987, .role__5d7c9, .roleTag__9e177, .tag__0e476';
         this.observer = null;
         this.settings = Object.assign({}, settings.default);
     }
-getRoleColor(role) {
-    const colorElement = role.querySelector('[class*="roleCircle"]') ||
-                        role.querySelector('[class*="roleColor"]') || 
-                        role.querySelector('[class*="tagRoleColor"]');
-    
-    if (colorElement) {
-        const color = window.getComputedStyle(colorElement).backgroundColor;
-        if (color && color !== 'rgba(0, 0, 0, 0)') {
-            const match = color.match(/[\d\.]+/g);
-            if (match) {
+
+    getRoleColor(role) {
+        const colorElement = role.querySelector('[class*="roleCircle"]') ||
+                            role.querySelector('[class*="roleColor"]') || 
+                            role.querySelector('[class*="tagRoleColor"]');
+        
+        if (colorElement) {
+            const color = window.getComputedStyle(colorElement).backgroundColor;
+            if (color && color !== 'rgba(0, 0, 0, 0)') {
+                const match = color.match(/[\d\.]+/g);
+                if (match) {
+                    return {
+                        border: `1px solid rgba(${match[0]}, ${match[1]}, ${match[2]}, 0.6)`,
+                        background: `rgba(${match[0]}, ${match[1]}, ${match[2]}, 0.153)`
+                    };
+                }
+            }
+        }
+        
+        const gradientElement = role.querySelector('[class*="twoColorGradient"], [class*="gradientDotAnimation"]');
+        if (gradientElement) {
+            const computed = window.getComputedStyle(gradientElement);
+            const color1 = computed.getPropertyValue('--custom-gradient-color-1').trim();
+            const color2 = computed.getPropertyValue('--custom-gradient-color-2').trim();
+            const color3 = computed.getPropertyValue('--custom-gradient-color-3').trim();
+            
+            if (color1 && color2) {
+                const toRgba = (color, opacity) => {
+                    if (color.startsWith('#')) {
+                        const r = parseInt(color.slice(1,3), 16);
+                        const g = parseInt(color.slice(3,5), 16);
+                        const b = parseInt(color.slice(5,7), 16);
+                        return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+                    }
+                    if (color.startsWith('rgb')) {
+                        return color.replace('rgb', 'rgba').replace(')', `, ${opacity})`);
+                    }
+                    return color;
+                };
+                
+                const c1 = toRgba(color1, 0.153);
+                const c2 = toRgba(color2, 0.153);
+                const c3 = color3 ? toRgba(color3, 0.153) : c1;
+                
+                const gradient = `linear-gradient(to right, ${c1}, ${c2}, ${c3})`;
+                
                 return {
-                    border: `1px solid rgba(${match[0]}, ${match[1]}, ${match[2]}, 0.6)`,
-                    background: `rgba(${match[0]}, ${match[1]}, ${match[2]}, 0.153)`
+                    border: `1px solid transparent`,
+                    background: gradient
                 };
             }
         }
+        
+        return null;
     }
-    
-const gradientElement = role.querySelector('[class*="twoColorGradient"], [class*="gradientDotAnimation"]');
-if (gradientElement) {
-    const computed = window.getComputedStyle(gradientElement);
-    const color1 = computed.getPropertyValue('--custom-gradient-color-1').trim();
-    const color2 = computed.getPropertyValue('--custom-gradient-color-2').trim();
-    const color3 = computed.getPropertyValue('--custom-gradient-color-3').trim();
-    
-    if (color1 && color2) {
-        const toRgba = (color, opacity) => {
-            if (color.startsWith('#')) {
-                const r = parseInt(color.slice(1,3), 16);
-                const g = parseInt(color.slice(3,5), 16);
-                const b = parseInt(color.slice(5,7), 16);
-                return `rgba(${r}, ${g}, ${b}, ${opacity})`;
-            }
-            if (color.startsWith('rgb')) {
-                return color.replace('rgb', 'rgba').replace(')', `, ${opacity})`);
-            }
-            return color;
-        };
-        
-        const c1 = toRgba(color1, 0.153);
-        const c2 = toRgba(color2, 0.153);
-        const c3 = color3 ? toRgba(color3, 0.153) : c1;
-        
-        const gradient = `linear-gradient(to right, ${c1}, ${c2}, ${c3})`;
-        
-        return {
-            border: `1px solid transparent`,
-            background: gradient
-        };
-    }
-}
 
-return null;
-}
-
-applyBorders() {
-    const roles = document.querySelectorAll(this.roleSelector);
-    roles.forEach(role => {
-        if (!role.hasAttribute('data-border-colorful')) {
-            const colors = this.getRoleColor(role);
-            if (colors) {
-                role.style.border = colors.border;
-                
-                if (this.settings.enableBackground) {
-                    role.style.background = colors.background;
+    applyBorders() {
+        const roles = document.querySelectorAll(this.roleSelector);
+        roles.forEach(role => {
+            if (!role.hasAttribute('data-border-colorful')) {
+                const colors = this.getRoleColor(role);
+                if (colors) {
+                    role.style.border = colors.border;
+                    
+                    if (this.settings.enableBackground) {
+                        role.style.background = colors.background;
+                    }
+                    
+                    role.setAttribute('data-border-colorful', 'true');
                 }
-                
-                role.setAttribute('data-border-colorful', 'true');
             }
+        });
+    }
+
+    updateCSS() {
+        if (dynamicStyleElement) dynamicStyleElement.remove();
+        
+        let fullCSS = baseCSS;
+        
+        if (!this.settings.enableBackground) {
+            fullCSS += `
+                .role__48c1c {
+                    background: none !important;
+                }
+            `;
         }
-    });
-}
+        
+        dynamicStyleElement = document.createElement('style');
+        dynamicStyleElement.id = styleId;
+        dynamicStyleElement.textContent = fullCSS;
+        document.head.appendChild(dynamicStyleElement);
+    }
 
     start() {
-        if (!document.getElementById('oldroles-styles')) {
-            const style = document.createElement('style');
-            style.id = 'oldroles-styles';
-            style.textContent = cssStyles;
-            document.head.appendChild(style);
-        }
+        this.updateCSS();
+        
         try {
             const saved = betterdiscord.Data.load('settings');
             if (saved) this.settings = Object.assign(this.settings, saved);
@@ -320,13 +330,13 @@ applyBorders() {
     }
 
     stop() {
-        const style = document.getElementById('oldroles-styles');
-        if (style) style.remove();
+        if (dynamicStyleElement) dynamicStyleElement.remove();
         if (this.observer) this.observer.disconnect();
         const roles = document.querySelectorAll(this.roleSelector);
         roles.forEach(role => {
             role.style.border = '';
             role.style.backgroundColor = '';
+            role.style.background = '';
             role.removeAttribute('data-border-colorful');
         });
     }
@@ -353,10 +363,12 @@ applyBorders() {
                         setState(v);
                         this.settings.enableBackground = v;
                         betterdiscord.Data.save('settings', this.settings);
+                        this.updateCSS();
                         
                         document.querySelectorAll(this.roleSelector).forEach(role => {
                             role.style.border = '';
                             role.style.backgroundColor = '';
+                            role.style.background = '';
                             role.removeAttribute('data-border-colorful');
                         });
                         this.applyBorders();
