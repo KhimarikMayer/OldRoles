@@ -138,7 +138,7 @@ const baseCSS = `
     margin-left: 2px;
 }
 .roleDot__5d7c9 {
-    margin-left: 0;
+    margin-left: 0 !important;
 }
 .role__5d7c9 {
     padding-top: 2px !important;
