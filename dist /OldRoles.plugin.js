@@ -91,11 +91,6 @@ const baseCSS = `
 .rolesList [data-text-variant="text-xs/normal"] {
     font-weight: 400;
 }
-.roleIcon_af3987 {
-    margin-top: -6px;
-    margin-left: 6px;
-    margin-right: -4px;
-}
 .role_af3987:has(.twoColorGradient_e5de78,.gradientDotAnimation_e5de78) .roleIcon_af3987 {
     margin-left: 4px;
 }
@@ -203,6 +198,9 @@ const baseCSS = `
 }
 .roleRemoveIcon__48c1c {
     margin-inline: -7px 0 !important;
+}
+.roleName__48c1c {
+	margin-right: 0;
 }
 `;
 
