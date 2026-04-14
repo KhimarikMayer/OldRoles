@@ -25,9 +25,4 @@ function saveSettings(settingsData) {
     } catch(e) {}
 }
 
-module.exports = {
-    config: settings,
-    default: settings.default,
-    load: loadSettings,
-    save: saveSettings
-};
+module.exports = { settings, loadSettings, saveSettings };
