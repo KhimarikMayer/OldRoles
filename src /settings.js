@@ -1,28 +1,29 @@
-const settings = {
-    main: {
-        enableBackground: {
-            name: "Background roles",
-            note: "Adds transparent background of roles (opacity 0.153)",
-            initial: false
-        }
-    },
-    default: {
+// settings.js
+const betterdiscord = new BdApi("OldRoles");
+
+export const Settings = {
+    defaults: {
         enableBackground: false
+    },
+
+    load() {
+        try {
+            const saved = betterdiscord.Data.load('settings');
+            if (saved) return Object.assign({}, this.defaults, saved);
+        } catch(e) {}
+        return Object.assign({}, this.defaults);
+    },
+
+    save(settings) {
+        try {
+            betterdiscord.Data.save('settings', settings);
+        } catch(e) {}
+    },
+
+    reset() {
+        try {
+            betterdiscord.Data.save('settings', this.defaults);
+        } catch(e) {}
+        return Object.assign({}, this.defaults);
     }
 };
-
-function loadSettings() {
-    try {
-        const saved = BdApi.loadData('OldRoles', 'settings');
-        if (saved) return Object.assign({}, settings.default, saved);
-    } catch(e) {}
-    return Object.assign({}, settings.default);
-}
-
-function saveSettings(settingsData) {
-    try {
-        BdApi.saveData('OldRoles', 'settings', settingsData);
-    } catch(e) {}
-}
-
-module.exports = { settings, loadSettings, saveSettings };
