@@ -1,95 +1,103 @@
-const { settings, loadSettings, saveSettings } = require('./settings.js');
-const { applyBorders, updateGradients, resetAllBackgrounds } = require('./roleManager.js');
-
 const betterdiscord = new BdApi("OldRoles");
 const react = BdApi.React;
 
-let FormSwitch;
-let styleElement = null;
-let gradientStyles = [];
+import { RoleManager } from './roles.js';
+import { Settings } from './settings.js';
+import styles from './styles.css';
 
-module.exports = class ColorfulRoleBorders {
+class OldRoles {
     constructor() {
-        this.roleSelector = '.role_af3987, .role__5d7c9, .roleTag__9e177, .tag__0e476';
+        this.roleManager = null;
         this.observer = null;
-        this.settings = loadSettings();
-        this.gradientStyles = [];
+        this.styleElement = null;
+        this.settings = null;
     }
 
     start() {
-        if (!styleElement) {
-            styleElement = document.createElement('style');
-            styleElement.id = 'oldroles-styles';
-            styleElement.textContent = baseCSS;
-            document.head.appendChild(styleElement);
+        // Добавляем стили
+        if (!this.styleElement) {
+            this.styleElement = document.createElement('style');
+            this.styleElement.id = 'oldroles-styles';
+            this.styleElement.textContent = styles;
+            document.head.appendChild(this.styleElement);
         }
-        
+
+        // Загружаем настройки
+        this.settings = Settings.load();
+
+        // Инициализируем менеджер ролей
+        this.roleManager = new RoleManager(this.settings);
+
+        // Первичная обработка
         setTimeout(() => {
-            applyBorders(this.roleSelector, this.settings, { value: this.gradientStyles });
-            updateGradients(this.settings, { value: this.gradientStyles });
-            resetAllBackgrounds(this.roleSelector, this.settings);
-        }, 2000);
-        
+            this.roleManager.applyBorders();
+            this.roleManager.processRectColors();
+            this.roleManager.processGradients();
+        }, 0);
+
+        // MutationObserver для динамических изменений
         this.observer = new MutationObserver(() => {
-            applyBorders(this.roleSelector, this.settings, { value: this.gradientStyles });
-            updateGradients(this.settings, { value: this.gradientStyles });
-            resetAllBackgrounds(this.roleSelector, this.settings);
+            this.roleManager.applyBorders();
+            this.roleManager.processRectColors();
+            this.roleManager.processGradients();
         });
         this.observer.observe(document.body, { childList: true, subtree: true });
     }
 
     stop() {
-        if (this.gradientStyles) {
-            this.gradientStyles.forEach(style => style.remove());
-            this.gradientStyles = [];
+        if (this.roleManager) {
+            this.roleManager.destroy();
         }
-        if (styleElement) styleElement.remove();
-        if (this.observer) this.observer.disconnect();
-        const roles = document.querySelectorAll(this.roleSelector);
-        roles.forEach(role => {
-            role.style.border = '';
-            role.style.backgroundColor = '';
-            role.style.background = '';
-            role.removeAttribute('data-border-colorful');
-        });
+        if (this.styleElement) {
+            this.styleElement.remove();
+            this.styleElement = null;
+        }
+        if (this.observer) {
+            this.observer.disconnect();
+            this.observer = null;
+        }
     }
 
     getSettingsPanel() {
-        if (!FormSwitch) {
-            FormSwitch = betterdiscord.Webpack.getBulk({
-                filter: betterdiscord.Webpack.Filters.byStrings('"data-toggleable-component":"switch"', 'layout:"horizontal"'),
-                searchExports: true
-            })[0];
-        }
-        
+        const FormSwitch = betterdiscord.Webpack.getBulk({
+            filter: betterdiscord.Webpack.Filters.byStrings('"data-toggleable-component":"switch"', 'layout:"horizontal"'),
+            searchExports: true
+        })[0];
+
         return react.createElement(() => {
             const [state, setState] = react.useState(this.settings.enableBackground);
             
-            return react.createElement(
-                'div',
-                { className: 'settingsContainer', style: { padding: '16px' } },
+            const handleChange = (value) => {
+                setState(value);
+                this.settings.enableBackground = value;
+                Settings.save(this.settings);
+                
+                // Применяем изменения
+                document.querySelectorAll('.role_af3987, .role__48c1c, .role__5d7c9').forEach(role => {
+                    role.style.removeProperty('border');
+                    role.style.removeProperty('background');
+                    role.removeAttribute('data-gradient-processed');
+                    role.removeAttribute('data-border-colorful');
+                });
+                
+                if (this.roleManager.gradientStyles) {
+                    this.roleManager.gradientStyles.forEach(style => style.remove());
+                    this.roleManager.gradientStyles = [];
+                }
+                
+                this.roleManager.processGradients();
+            };
+            
+            return react.createElement('div', { className: 'settingsContainer', style: { padding: '16px' } },
                 react.createElement(FormSwitch, {
-                    label: settings.main.enableBackground.name,
-                    description: settings.main.enableBackground.note,
+                    label: "Background roles",
+                    description: "Adds transparent background of roles (opacity 0.153)",
                     checked: state,
-                    onChange: (v) => {
-                        setState(v);
-                        this.settings.enableBackground = v;
-                        saveSettings(this.settings);
-                        
-                        document.querySelectorAll(this.roleSelector).forEach(role => {
-                            role.style.border = '';
-                            role.style.backgroundColor = '';
-                            role.style.background = '';
-                            role.removeAttribute('data-border-colorful');
-                        });
-                        
-                        applyBorders(this.roleSelector, this.settings, { value: this.gradientStyles });
-                        updateGradients(this.settings, { value: this.gradientStyles });
-                        resetAllBackgrounds(this.roleSelector, this.settings);
-                    }
+                    onChange: handleChange
                 })
             );
         });
     }
-};
+}
+
+module.exports = OldRoles;
