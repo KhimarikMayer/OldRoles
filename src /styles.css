@@ -207,7 +207,7 @@ const baseCSS = `
 }
 .role__5d7c9,
 .roleTag__9cd44 {
-    padding: 4px;
+    padding: 4px !important;
     background-color: rgba(0, 0, 0, 0);
 }
 .userPopout .bodyInnerWrapper .rolesList .addButton {
