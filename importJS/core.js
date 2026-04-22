@@ -1,7 +1,6 @@
 const betterdiscord = new BdApi("OldRoles");
 const react = BdApi.React;
 
-
 let FormSwitch;
 let styleElement = null;
 
