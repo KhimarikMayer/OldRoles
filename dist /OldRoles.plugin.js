@@ -461,6 +461,7 @@ processRectColors() {
 applyBorders() {
     const roles = document.querySelectorAll(this.roleSelector);
     roles.forEach(role => {
+        if (role.hasAttribute('data-border-colorful')) return;
         if (!role.hasAttribute('data-border-colorful')) {
             const colors = this.getRoleColor(role);
             if (colors) {
@@ -579,6 +580,8 @@ processGradients() {
         
         if (!role) return;
         
+        if (role.hasAttribute('data-gradient-processed')) return;
+        
         const fill = el.getAttribute('fill');
         const idMatch = fill.match(/url\(#([^)]+)\)/);
         if (!idMatch) return;
@@ -638,17 +641,28 @@ const getColor = (stop) => {
             styleElement.textContent = baseCSS;
             document.head.appendChild(styleElement);
         }
+
+        const allRoles = document.querySelectorAll(this.roleSelector);
+    allRoles.forEach(role => {
+        role.style.border = '';
+        role.style.backgroundColor = '';
+        role.style.background = '';
+        role.style.backgroundImage = '';
+        role.removeAttribute('data-border-colorful');
+        role.removeAttribute('data-gradient-processed');
+        role.removeAttribute('data-gradient-id');
+    });
         
         try {
             const saved = betterdiscord.Data.load('settings');
             if (saved) this.settings = Object.assign(this.settings, saved);
         } catch(e) {}
         
-        setTimeout(() => {
-            this.applyBorders();
-            this.processRectColors();
-            this.processGradients();
-        }, 0);
+    setTimeout(() => {
+        this.applyBorders();
+        this.processRectColors();
+        this.processGradients();
+    }, 50);
         
         this.observer = new MutationObserver(() => {
             this.applyBorders();
@@ -665,13 +679,7 @@ const getColor = (stop) => {
         }
         if (styleElement) styleElement.remove();
         if (this.observer) this.observer.disconnect();
-        const roles = document.querySelectorAll(this.roleSelector);
-        roles.forEach(role => {
-            role.style.border = '';
-            role.style.backgroundColor = '';
-            role.style.background = '';
-            role.removeAttribute('data-border-colorful');
-        });
+        styleElement = null;
     }
 
 getSettingsPanel() {
@@ -697,17 +705,27 @@ getSettingsPanel() {
                     this.settings.enableBackground = v;
                     betterdiscord.Data.save('settings', this.settings);
                     
-                    document.querySelectorAll('.role_af3987, .role__48c1c, .role__5d7c9').forEach(role => {
-                        role.style.removeProperty('border');
-                        role.style.removeProperty('background');
-                        role.removeAttribute('data-gradient-processed');
-                        role.removeAttribute('data-border-colorful');
-                    });
+    const roles = document.querySelectorAll('.role_af3987, .role__48c1c, .role__5d7c9');
+    roles.forEach(role => {
+        role.style.removeProperty('border');
+        role.style.removeProperty('background');
+        role.style.removeProperty('background-color');
+        role.style.removeProperty('background-image');
+        role.removeAttribute('data-gradient-processed');
+        role.removeAttribute('data-border-colorful');
+        role.removeAttribute('data-gradient-id');
+    });
                     
                     if (this.gradientStyles) {
                         this.gradientStyles.forEach(style => style.remove());
                         this.gradientStyles = [];
                     }
+
+                        setTimeout(() => {
+        this.processGradients();
+        this.applyBorders();
+        this.processRectColors();
+    }, 50);
                     
                     this.processGradients();
                 }
