@@ -91,8 +91,8 @@ const baseCSS = `
 }
 .pillButton_af3987,
 .addButton_af3987 {
-    min-width: 22px;
-    height: 22px;
+    min-width: 22px !important;
+    height: 22px !important;
 }
 .roleName_dfa8b6,
 .member-perms .member-perm .name {
@@ -105,7 +105,7 @@ const baseCSS = `
     margin-left: 2px;
 }
 .removeButton_af3987 {
-    margin-right: -4px;
+    margin-right: -4px !important;
 }
 .role__48c1c .roleCircle__4f569 {
     margin-left: 0;
@@ -127,8 +127,8 @@ const baseCSS = `
     margin-left: 4px;
 }
 .role_af3987 {
-    min-height: 22px;
-    height: 22px;
+    min-height: 22px !important;
+    height: 22px !important;
 }
 .role__5d7c9:has(.twoColorGradient_e5de78,.gradientDotAnimation_e5de78),
 .role__48c1c:has(.twoColorGradient_e5de78,.gradientDotAnimation_e5de78),
@@ -235,6 +235,18 @@ const baseCSS = `
 .roleName__48c1c {
 	margin-right: 0;
 }
+.full-motion.app-focused:not(.hardware-acceleration-disabled) .gradientDotAnimation_e5de78:hover {
+    animation: gradientDotAnimationOriginal 2.5s linear infinite;
+}
+
+@keyframes gradientDotAnimationOriginal {
+    0% {
+        background-position: 0;
+    }
+    100% {
+        background-position: 12px;
+    }
+}
 `;
 
 const settings = {
@@ -299,7 +311,6 @@ function processGradientElement(gradientElement, settings) {
     let color3 = stops[2] ? getStopColor(stops[2]) : color1;
     
     if (!color1 || !color2) {
-        console.log('Не удалось извлечь цвета из stops:', stops);
         return false;
     }
     
@@ -315,24 +326,78 @@ function processGradientElement(gradientElement, settings) {
         return hex;
     };
     
-    role.style.setProperty('border', `1px solid ${toRgba(color2, 0.6)}`, 'important');
+    role.style.setProperty('border', `1px solid ${toRgba(color2, 0.6)}`);
     if (settings.enableBackground) {
-        role.style.setProperty('background', `linear-gradient(to right, ${toRgba(color1, 0.153)}, ${toRgba(color2, 0.153)}, ${toRgba(color3, 0.153)})`, 'important');
+        role.style.setProperty('background', `linear-gradient(to right, ${toRgba(color1, 0.153)}, ${toRgba(color2, 0.153)}, ${toRgba(color3, 0.153)})`);
+        role.style.setProperty('background-size', '200% 100%');
+        role.style.setProperty('background-position', '0% 0%');
     }
     role.setAttribute('data-gradient-processed', 'true');
-    
-    console.log(`Gradient applied: ${color1} → ${color2} → ${color3}`);
-    return true;
 }
-
 module.exports = class ColorfulRoleBorders {
-    constructor() {
+constructor() {
     this.roleSelector = '.role_af3987, .role__5d7c9, .roleTag__9e177, .tag__0e476, .role__48c1c';
     this.observer = null;
     this.settings = Object.assign({}, settings.default);
     this.gradientStyles = [];
+    this.animationStyleElement = null;
+}
+updateGradientAnimations() {
+    if (this.animationStyleElement) {
+        this.animationStyleElement.remove();
+        this.animationStyleElement = null;
     }
-
+    
+    if (!this.settings.enableBackground) return;
+    
+    this.animationStyleElement = document.createElement('style');
+    this.animationStyleElement.id = 'oldroles-animations';
+    this.animationStyleElement.textContent = `
+        .full-motion.app-focused:not(.hardware-acceleration-disabled) .role_af3987:has(.twoColorGradient_e5de78,.gradientDotAnimation_e5de78):hover,
+        .full-motion.app-focused:not(.hardware-acceleration-disabled) .role__48c1c:has(.twoColorGradient_e5de78,.gradientDotAnimation_e5de78):hover,
+        .full-motion.app-focused:not(.hardware-acceleration-disabled) .role_af3987[data-gradient-processed="true"]:hover,
+        .full-motion.app-focused:not(.hardware-acceleration-disabled) .role__48c1c[data-gradient-processed="true"]:hover,
+        .full-motion.app-focused:not(.hardware-acceleration-disabled) .role__5d7c9[data-gradient-processed="true"]:hover {
+            animation: oldrolesGradientAnimation 2.5s linear infinite;
+            background-size: 200% 100% !important;
+        }
+        
+        .full-motion.app-focused:not(.hardware-acceleration-disabled) .gradientDotAnimation_e5de78:hover {
+            animation: gradientDotAnimationOriginal 2.5s linear infinite;
+        }
+        
+        .full-motion.app-focused:not(.hardware-acceleration-disabled) .role_af3987:hover .gradientDotAnimation_e5de78,
+        .full-motion.app-focused:not(.hardware-acceleration-disabled) .role__48c1c:hover .gradientDotAnimation_e5de78,
+        .full-motion.app-focused:not(.hardware-acceleration-disabled) .role__5d7c9:hover .gradientDotAnimation_e5de78,
+        .full-motion.app-focused:not(.hardware-acceleration-disabled) .role_af3987:hover .dot__4f569[fill^="url(#dotGradient"],
+        .full-motion.app-focused:not(.hardware-acceleration-disabled) .role__48c1c:hover .dot__4f569[fill^="url(#dotGradient"],
+        .full-motion.app-focused:not(.hardware-acceleration-disabled) .role__5d7c9:hover .dot__4f569[fill^="url(#dotGradient"],
+        .full-motion.app-focused:not(.hardware-acceleration-disabled) .role_af3987:hover .dotBorderColor__4f569[fill^="url(#dotGradient"],
+        .full-motion.app-focused:not(.hardware-acceleration-disabled) .role__48c1c:hover .dotBorderColor__4f569[fill^="url(#dotGradient"],
+        .full-motion.app-focused:not(.hardware-acceleration-disabled) .role__5d7c9:hover .dotBorderColor__4f569[fill^="url(#dotGradient"] {
+            animation: gradientDotAnimationOriginal 2.5s linear infinite;
+        }
+        
+        @keyframes oldrolesGradientAnimation {
+            0% {
+                background-position: 0% 0%;
+            }
+            100% {
+                background-position: 100% 0%;
+            }
+        }
+        
+        @keyframes gradientDotAnimationOriginal {
+            0% {
+                background-position: 0;
+            }
+            100% {
+                background-position: 12px;
+            }
+        }
+    `;
+    document.head.appendChild(this.animationStyleElement);
+}
 getRoleColor(role) {
     const colorElement = role.querySelector('[class*="roleCircle"] rect, [class*="roleColor"] rect, [class*="tagRoleColor"] rect, [class*="roleDot"] rect') ||
                         role.querySelector('[class*="roleCircle"], [class*="roleColor"], [class*="tagRoleColor"], [class*="roleDot"]');
@@ -579,7 +644,6 @@ processGradients() {
         }
         
         if (!role) return;
-        
         if (role.hasAttribute('data-gradient-processed')) return;
         
         const fill = el.getAttribute('fill');
@@ -592,28 +656,28 @@ processGradients() {
         const stops = gradient.querySelectorAll('stop');
         if (stops.length < 2) return;
         
-const getColor = (stop) => {
-    const style = stop.getAttribute('style');
-    if (style) {
-        const rgbMatch = style.match(/stop-color:\s*rgb\((\d+),\s*(\d+),\s*(\d+)\)/i);
-        if (rgbMatch) {
-            return { r: parseInt(rgbMatch[1]), g: parseInt(rgbMatch[2]), b: parseInt(rgbMatch[3]) };
-        }
-    }
-    let color = stop.getAttribute('stop-color');
-    if (color) {
-        const hexMatch = color.match(/#([0-9a-fA-F]{6})/);
-        if (hexMatch) {
-            const hex = hexMatch[0];
-            return {
-                r: parseInt(hex.slice(1,3), 16),
-                g: parseInt(hex.slice(3,5), 16),
-                b: parseInt(hex.slice(5,7), 16)
-            };
-        }
-    }
-    return null;
-};
+        const getColor = (stop) => {
+            const style = stop.getAttribute('style');
+            if (style) {
+                const rgbMatch = style.match(/stop-color:\s*rgb\((\d+),\s*(\d+),\s*(\d+)\)/i);
+                if (rgbMatch) {
+                    return { r: parseInt(rgbMatch[1]), g: parseInt(rgbMatch[2]), b: parseInt(rgbMatch[3]) };
+                }
+            }
+            let color = stop.getAttribute('stop-color');
+            if (color) {
+                const hexMatch = color.match(/#([0-9a-fA-F]{6})/);
+                if (hexMatch) {
+                    const hex = hexMatch[0];
+                    return {
+                        r: parseInt(hex.slice(1,3), 16),
+                        g: parseInt(hex.slice(3,5), 16),
+                        b: parseInt(hex.slice(5,7), 16)
+                    };
+                }
+            }
+            return null;
+        };
         
         let c1 = getColor(stops[0]);
         let c2 = getColor(stops[1]);
@@ -621,28 +685,28 @@ const getColor = (stop) => {
         
         if (!c1 || !c2) return;
         
-        role.style.setProperty('border', `1px solid rgba(${c1.r}, ${c1.g}, ${c1.b}, 0.6)`, 'important');
+        role.style.setProperty('border', `1px solid rgba(${c1.r}, ${c1.g}, ${c1.b}, 0.6)`);
         if (this.settings.enableBackground) {
-            role.style.setProperty('background', `linear-gradient(to right, rgba(${c1.r}, ${c1.g}, ${c1.b}, 0.153), rgba(${c2.r}, ${c2.g}, ${c2.b}, 0.153), rgba(${c3.r}, ${c3.g}, ${c3.b}, 0.153))`, 'important');
+            role.style.setProperty('background', `linear-gradient(to right, rgba(${c1.r}, ${c1.g}, ${c1.b}, 0.153), rgba(${c2.r}, ${c2.g}, ${c2.b}, 0.153), rgba(${c3.r}, ${c3.g}, ${c3.b}, 0.153))`);
         } else {
-            role.style.setProperty('background', 'rgba(0, 0, 0, 0)', 'important');
-            role.style.setProperty('background-color', 'transparent', 'important');
-            role.style.setProperty('background-image', 'none', 'important');
+            role.style.setProperty('background', 'rgba(0, 0, 0, 0)');
+            role.style.setProperty('background-color', 'transparent');
+            role.style.setProperty('background-image', 'none');
         }
         
         role.setAttribute('data-gradient-processed', 'true');
     });
 }
 
-    start() {
-        if (!styleElement) {
-            styleElement = document.createElement('style');
-            styleElement.id = 'oldroles-styles';
-            styleElement.textContent = baseCSS;
-            document.head.appendChild(styleElement);
-        }
+start() {
+    if (!styleElement) {
+        styleElement = document.createElement('style');
+        styleElement.id = 'oldroles-styles';
+        styleElement.textContent = baseCSS;
+        document.head.appendChild(styleElement);
+    }
 
-        const allRoles = document.querySelectorAll(this.roleSelector);
+    const allRoles = document.querySelectorAll(this.roleSelector);
     allRoles.forEach(role => {
         role.style.border = '';
         role.style.backgroundColor = '';
@@ -652,35 +716,39 @@ const getColor = (stop) => {
         role.removeAttribute('data-gradient-processed');
         role.removeAttribute('data-gradient-id');
     });
-        
-        try {
-            const saved = betterdiscord.Data.load('settings');
-            if (saved) this.settings = Object.assign(this.settings, saved);
-        } catch(e) {}
-        
+    
+    try {
+        const saved = betterdiscord.Data.load('settings');
+        if (saved) this.settings = Object.assign(this.settings, saved);
+    } catch(e) {}
+    
+    this.updateGradientAnimations();
+    
     setTimeout(() => {
         this.applyBorders();
         this.processRectColors();
         this.processGradients();
-    }, 50);
-        
-        this.observer = new MutationObserver(() => {
-            this.applyBorders();
-            this.processRectColors();
-            this.processGradients();
-        });
-        this.observer.observe(document.body, { childList: true, subtree: true });
-    }
+    }, 0);
+    
+    this.observer = new MutationObserver(() => {
+        this.applyBorders();
+        this.processRectColors();
+        this.processGradients();
+    });
+    this.observer.observe(document.body, { childList: true, subtree: true });
+}
 
-    stop() {
-        if (this.gradientStyles) {
-            this.gradientStyles.forEach(style => style.remove());
-            this.gradientStyles = [];
-        }
-        if (styleElement) styleElement.remove();
-        if (this.observer) this.observer.disconnect();
-        styleElement = null;
+stop() {
+    if (this.gradientStyles) {
+        this.gradientStyles.forEach(style => style.remove());
+        this.gradientStyles = [];
     }
+    if (styleElement) styleElement.remove();
+    if (this.animationStyleElement) this.animationStyleElement.remove();
+    if (this.observer) this.observer.disconnect();
+    styleElement = null;
+    this.animationStyleElement = null;
+}
 
 getSettingsPanel() {
     if (!FormSwitch) {
@@ -704,6 +772,15 @@ getSettingsPanel() {
                     setState(v);
                     this.settings.enableBackground = v;
                     betterdiscord.Data.save('settings', this.settings);
+
+                    if (v) {
+        this.updateGradientAnimations();
+    } else {
+        if (this.animationStyleElement) {
+            this.animationStyleElement.remove();
+            this.animationStyleElement = null;
+        }
+    }
                     
     const roles = document.querySelectorAll('.role_af3987, .role__48c1c, .role__5d7c9');
     roles.forEach(role => {
@@ -725,7 +802,7 @@ getSettingsPanel() {
         this.processGradients();
         this.applyBorders();
         this.processRectColors();
-    }, 50);
+    }, 0);
                     
                     this.processGradients();
                 }
