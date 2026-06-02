@@ -13,16 +13,25 @@ let styleElement = null;
 
 const baseCSS = `
 
-.full-motion.app-focused:not(.hardware-acceleration-disabled) .role_af3987:has(.twoColorGradient_e5de78,.gradientDotAnimation_e5de78):hover, .full-motion.app-focused:not(.hardware-acceleration-disabled) .role__48c1c:has(.twoColorGradient_e5de78,.gradientDotAnimation_e5de78):hover, .full-motion.app-focused:not(.hardware-acceleration-disabled) .role_af3987[data-gradient-processed="true"]:hover, .full-motion.app-focused:not(.hardware-acceleration-disabled) .role__48c1c[data-gradient-processed="true"]:hover, .full-motion.app-focused:not(.hardware-acceleration-disabled) .role__5d7c9[data-gradient-processed="true"]:hover { animation: oldrolesGradientAnimation 2.5s linear infinite; background-size: 200% 100% !important; } .full-motion.app-focused:not(.hardware-acceleration-disabled) .gradientDotAnimation_e5de78:hover { animation: gradientDotAnimationOriginal 2.5s linear infinite; } .full-motion.app-focused:not(.hardware-acceleration-disabled) .role_af3987:hover .gradientDotAnimation_e5de78, .full-motion.app-focused:not(.hardware-acceleration-disabled) .role__48c1c:hover .gradientDotAnimation_e5de78, .full-motion.app-focused:not(.hardware-acceleration-disabled) .role__5d7c9:hover .gradientDotAnimation_e5de78, .full-motion.app-focused:not(.hardware-acceleration-disabled) .role_af3987:hover .dot__4f569[fill^="url(#dotGradient"], .full-motion.app-focused:not(.hardware-acceleration-disabled) .role__48c1c:hover .dot__4f569[fill^="url(#dotGradient"], .full-motion.app-focused:not(.hardware-acceleration-disabled) .role__5d7c9:hover .dot__4f569[fill^="url(#dotGradient"], .full-motion.app-focused:not(.hardware-acceleration-disabled) .role_af3987:hover .dotBorderColor__4f569[fill^="url(#dotGradient"], .full-motion.app-focused:not(.hardware-acceleration-disabled) .role__48c1c:hover .dotBorderColor__4f569[fill^="url(#dotGradient"], .full-motion.app-focused:not(.hardware-acceleration-disabled) .role__5d7c9:hover .dotBorderColor__4f569[fill^="url(#dotGradient"] { animation: gradientDotAnimationOriginal 2.5s linear infinite; } @keyframes oldrolesGradientAnimation { 0% { background-position: 0% 0%; } 100% { background-position: 100% 0%; } } @keyframes gradientDotAnimationOriginal { 0% { background-position: 0; } 100% { background-position: 12px; } }
+.full-motion.app-focused:not(.hardware-acceleration-disabled) .role_af3987:has(.twoColorGradient_e5de78,.gradientDotAnimation_e5de78):hover,
+.full-motion.app-focused:not(.hardware-acceleration-disabled) .role__48c1c:has(.twoColorGradient_e5de78,.gradientDotAnimation_e5de78):hover,
+.full-motion.app-focused:not(.hardware-acceleration-disabled) .role__5d7c9:has(.twoColorGradient_e5de78,.gradientDotAnimation_e5de78):hover,
+.full-motion.app-focused:not(.hardware-acceleration-disabled) .role_af3987[data-gradient-processed="true"]:hover,
+.full-motion.app-focused:not(.hardware-acceleration-disabled) .role__48c1c[data-gradient-processed="true"]:hover,
+.full-motion.app-focused:not(.hardware-acceleration-disabled) .role__5d7c9[data-gradient-processed="true"]:hover,
+.full-motion.app-focused:not(.hardware-acceleration-disabled) .role_af3987:has(.gradientDotAnimation_e5de78):hover,
+.full-motion.app-focused:not(.hardware-acceleration-disabled) .role__48c1c:has(.gradientDotAnimation_e5de78):hover,
+.full-motion.app-focused:not(.hardware-acceleration-disabled) .role__5d7c9:has(.gradientDotAnimation_e5de78):hover,
+.full-motion.app-focused:not(.hardware-acceleration-disabled) .role_af3987:has(.dot__4f569[fill^="url(#dotGradient"]):hover,
+.full-motion.app-focused:not(.hardware-acceleration-disabled) .role__48c1c:has(.dot__4f569[fill^="url(#dotGradient"]):hover,
+.full-motion.app-focused:not(.hardware-acceleration-disabled) .role__5d7c9:has(.dot__4f569[fill^="url(#dotGradient"]):hover,
+.full-motion.app-focused:not(.hardware-acceleration-disabled) .role_af3987:has(.dotBorderColor__4f569[fill^="url(#dotGradient"]):hover,
+.full-motion.app-focused:not(.hardware-acceleration-disabled) .role__48c1c:has(.dotBorderColor__4f569[fill^="url(#dotGradient"]):hover,
+.full-motion.app-focused:not(.hardware-acceleration-disabled) .role__5d7c9:has(.dotBorderColor__4f569[fill^="url(#dotGradient"]):hover { animation: oldrolesGradientAnimation 2.5s linear infinite; background-size: 200% 100% !important; }
 .roleDot_af3987 {
     font-size: 1.34em;
 }
-.dot__4f569 {
-    x: 5px;
-    y: 5px;
-    width: 10px;
-    height: 10px;
-}
+.dot__4f569,
 .dotBorderColor__4f569,
 .dotBorderBase__4f569 {
     x: 4px;
@@ -37,8 +46,8 @@ const baseCSS = `
 }
 .roleDot_af3987 {
     margin-left: -2px;
-    width: 20.9px;
-    height: 20.9px;
+    width: 20px;
+    height: 20px;
 }
 .roleDot__48c1c {
     margin-left: -4px;
@@ -208,8 +217,8 @@ const baseCSS = `
 .member-perms {
     gap: 4px;
 }
-.roleTag__9e177 {
-    background-color: var(--background-base-low) !important;
+#app-mount .roleTag__9e177 {
+    background-color: var(--backgroundDark) !important;
     border-radius: 5px;
     padding: 2px;
 }
@@ -236,18 +245,6 @@ const baseCSS = `
 }
 .roleName__48c1c {
 	margin-right: 0;
-}
-.full-motion.app-focused:not(.hardware-acceleration-disabled) .gradientDotAnimation_e5de78:hover {
-    animation: gradientDotAnimationOriginal 2.5s linear infinite;
-}
-
-@keyframes gradientDotAnimationOriginal {
-    0% {
-        background-position: 0;
-    }
-    100% {
-        background-position: 12px;
-    }
 }
 `;
 
@@ -364,10 +361,6 @@ updateGradientAnimations() {
             background-size: 200% 100% !important;
         }
         
-        .full-motion.app-focused:not(.hardware-acceleration-disabled) .gradientDotAnimation_e5de78:hover {
-            animation: gradientDotAnimationOriginal 2.5s linear infinite;
-        }
-        
         .full-motion.app-focused:not(.hardware-acceleration-disabled) .role_af3987:hover .gradientDotAnimation_e5de78,
         .full-motion.app-focused:not(.hardware-acceleration-disabled) .role__48c1c:hover .gradientDotAnimation_e5de78,
         .full-motion.app-focused:not(.hardware-acceleration-disabled) .role__5d7c9:hover .gradientDotAnimation_e5de78,
@@ -402,7 +395,7 @@ updateGradientAnimations() {
 }
 getRoleColor(role) {
     const colorElement = role.querySelector('[class*="roleCircle"] rect, [class*="roleColor"] rect, [class*="tagRoleColor"] rect, [class*="roleDot"] rect') ||
-                        role.querySelector('[class*="roleCircle"], [class*="roleColor"], [class*="tagRoleColor"], [class*="roleDot"]');
+                        role.querySelector('[class*="roleCircle"], [class*="roleFlowerStar"], [class*="roleColor"], [class*="tagRoleColor"], [class*="roleDot"]');
     
     if (colorElement) {
         let color;
@@ -486,42 +479,69 @@ processRectColors() {
         if (role.hasAttribute('data-border-colorful')) return;
         
         const gradientElement = role.querySelector('[fill^="url(#dotGradient"]');
+        if (gradientElement) return;
         
-        if (gradientElement) {
-            return;
+        const colorElement = role.querySelector('rect[fill], circle[fill]');
+        if (!colorElement) return;
+        
+        let fill = colorElement.getAttribute('fill');
+        if (!fill || fill.includes('url(')) return;
+        
+        let r, g, b;
+        
+        const rgbMatch = fill.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+        if (rgbMatch) {
+            r = parseInt(rgbMatch[1]);
+            g = parseInt(rgbMatch[2]);
+            b = parseInt(rgbMatch[3]);
+        }
+        else if (fill.startsWith('#')) {
+            r = parseInt(fill.slice(1,3), 16);
+            g = parseInt(fill.slice(3,5), 16);
+            b = parseInt(fill.slice(5,7), 16);
+        }
+        else if (fill.startsWith('hsl')) {
+            const hslMatch = fill.match(/hsl\((\d+),\s*([\d.]+)%,\s*([\d.]+)%\)/);
+            if (hslMatch) {
+                let h = parseInt(hslMatch[1]) / 360;
+                let s = parseFloat(hslMatch[2]) / 100;
+                let l = parseFloat(hslMatch[3]) / 100;
+                
+                let rgb;
+                if (s === 0) {
+                    rgb = { r: l * 255, g: l * 255, b: l * 255 };
+                } else {
+                    const hue2rgb = (p, q, t) => {
+                        if (t < 0) t += 1;
+                        if (t > 1) t -= 1;
+                        if (t < 1/6) return p + (q - p) * 6 * t;
+                        if (t < 1/2) return q;
+                        if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                        return p;
+                    };
+                    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                    const p = 2 * l - q;
+                    rgb = {
+                        r: hue2rgb(p, q, h + 1/3) * 255,
+                        g: hue2rgb(p, q, h) * 255,
+                        b: hue2rgb(p, q, h - 1/3) * 255
+                    };
+                }
+                r = Math.round(rgb.r);
+                g = Math.round(rgb.g);
+                b = Math.round(rgb.b);
+            }
         }
         
-        const colorElement = role.querySelector('rect[fill]:not([fill="black"]), circle[fill]:not([fill="black"])');
-        if (colorElement) {
-            let fill = colorElement.getAttribute('fill');
-            if (fill && !fill.includes('url(')) {
-                const rgbMatch = fill.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
-                if (rgbMatch) {
-                    const r = parseInt(rgbMatch[1]);
-                    const g = parseInt(rgbMatch[2]);
-                    const b = parseInt(rgbMatch[3]);
-                    role.style.border = `1px solid rgba(${r}, ${g}, ${b}, 0.6)`;
-                    if (this.settings.enableBackground) {
-                        role.style.background = `rgba(${r}, ${g}, ${b}, 0.153)`;
-                    } else {
-                        role.style.background = '';
-                        role.style.backgroundColor = '';
-                    }
-                    role.setAttribute('data-border-colorful', 'true');
-                } else if (fill.startsWith('#')) {
-                    const r = parseInt(fill.slice(1,3), 16);
-                    const g = parseInt(fill.slice(3,5), 16);
-                    const b = parseInt(fill.slice(5,7), 16);
-                    role.style.border = `1px solid rgba(${r}, ${g}, ${b}, 0.6)`;
-                    if (this.settings.enableBackground) {
-                        role.style.background = `rgba(${r}, ${g}, ${b}, 0.153)`;
-                    } else {
-                        role.style.background = '';
-                        role.style.backgroundColor = '';
-                    }
-                    role.setAttribute('data-border-colorful', 'true');
-                }
+        if (r !== undefined) {
+            role.style.border = `1px solid rgba(${r}, ${g}, ${b}, 0.6)`;
+            if (this.settings.enableBackground) {
+                role.style.backgroundColor = `rgba(${r}, ${g}, ${b}, 0.153)`;
+            } else {
+                role.style.removeProperty('background');
+                role.style.removeProperty('background-color');
             }
+            role.setAttribute('data-border-colorful', 'true');
         }
     });
 }
@@ -616,149 +636,152 @@ updateGradients() {
     this.gradientStyles = styles;
 }
 
-resetAllBackgrounds() {
-    const allRoles = document.querySelectorAll(this.roleSelector);
-    allRoles.forEach(role => {
-        if (!this.settings.enableBackground) {
-            role.style.background = '';
-            role.style.backgroundColor = '';
+    resetAllBackgrounds() {
+        const allRoles = document.querySelectorAll(this.roleSelector);
+        allRoles.forEach(role => {
+            if (!this.settings.enableBackground) {
+                role.style.background = '';
+                role.style.backgroundColor = '';
+            }
+        });
+        
+        const gradientRoles = document.querySelectorAll('.role__48c1c');
+        gradientRoles.forEach(role => {
+            if (!this.settings.enableBackground) {
+                role.style.background = '';
+                role.style.backgroundColor = '';
+                role.style.backgroundImage = '';
+            }
+        });
+    }
+
+    processGradients() {
+        const elements = document.querySelectorAll('[fill^="url(#dotGradient"]');
+        
+        elements.forEach(el => {
+            if (el.getAttribute('data-animated') === 'true') return;
+            
+            let role = el.closest('.role_af3987, .role__48c1c, .role__5d7c9');
+            
+            if (!role && el.ownerSVGElement) {
+                role = el.ownerSVGElement.closest('.role_af3987, .role__48c1c, .role__5d7c9');
+            }
+            
+            if (!role) return;
+            if (role.hasAttribute('data-gradient-processed')) return;
+            
+            const fill = el.getAttribute('fill');
+            const idMatch = fill.match(/url\(#([^)]+)\)/);
+            if (!idMatch) return;
+            
+            const gradient = document.getElementById(idMatch[1]);
+            if (!gradient) return;
+            
+            const stops = gradient.querySelectorAll('stop');
+            if (stops.length < 2) return;
+            
+            const getColor = (stop) => {
+                const style = stop.getAttribute('style');
+                if (style) {
+                    const rgbMatch = style.match(/stop-color:\s*rgb\((\d+),\s*(\d+),\s*(\d+)\)/i);
+                    if (rgbMatch) {
+                        return { r: parseInt(rgbMatch[1]), g: parseInt(rgbMatch[2]), b: parseInt(rgbMatch[3]) };
+                    }
+                }
+                let color = stop.getAttribute('stop-color');
+                if (color) {
+                    const hexMatch = color.match(/#([0-9a-fA-F]{6})/);
+                    if (hexMatch) {
+                        const hex = hexMatch[0];
+                        return {
+                            r: parseInt(hex.slice(1,3), 16),
+                            g: parseInt(hex.slice(3,5), 16),
+                            b: parseInt(hex.slice(5,7), 16)
+                        };
+                    }
+                }
+                return null;
+            };
+            
+            let c1 = getColor(stops[0]);
+            let c2 = getColor(stops[1]);
+            let c3 = stops[2] ? getColor(stops[2]) : c1;
+            
+            if (!c1 || !c2) return;
+            
+            role.style.setProperty('border', `1px solid rgba(${c1.r}, ${c1.g}, ${c1.b}, 0.6)`);
+            if (this.settings.enableBackground) {
+                role.style.setProperty('background', `linear-gradient(to right, rgba(${c1.r}, ${c1.g}, ${c1.b}, 0.153), rgba(${c2.r}, ${c2.g}, ${c2.b}, 0.153), rgba(${c3.r}, ${c3.g}, ${c3.b}, 0.153))`);
+            } else {
+                role.style.setProperty('background', 'rgba(0, 0, 0, 0)');
+                role.style.setProperty('background-color', 'transparent');
+                role.style.setProperty('background-image', 'none');
+            }
+            
+            role.setAttribute('data-gradient-processed', 'true');
+        });
+    }
+
+    start() {
+        if (!styleElement) {
+            styleElement = document.createElement('style');
+            styleElement.id = 'oldroles-styles';
+            styleElement.textContent = baseCSS;
+            document.head.appendChild(styleElement);
         }
-    });
-    
-    const gradientRoles = document.querySelectorAll('.role__48c1c');
-    gradientRoles.forEach(role => {
-        if (!this.settings.enableBackground) {
-            role.style.background = '';
+
+        const allRoles = document.querySelectorAll(this.roleSelector);
+        allRoles.forEach(role => {
+            role.style.border = '';
             role.style.backgroundColor = '';
+            role.style.background = '';
             role.style.backgroundImage = '';
-        }
-    });
-}
-
-processGradients() {
-    const elements = document.querySelectorAll('[fill^="url(#dotGradient"]');
-    
-    elements.forEach(el => {
-        let role = el.closest('.role_af3987, .role__48c1c, .role__5d7c9');
+            role.removeAttribute('data-border-colorful');
+            role.removeAttribute('data-gradient-processed');
+            role.removeAttribute('data-gradient-id');
+        });
         
-        if (!role && el.ownerSVGElement) {
-            role = el.ownerSVGElement.closest('.role_af3987, .role__48c1c, .role__5d7c9');
-        }
+        try {
+            const saved = betterdiscord.Data.load('settings');
+            if (saved) this.settings = Object.assign(this.settings, saved);
+        } catch(e) {}
         
-        if (!role) return;
-        if (role.hasAttribute('data-gradient-processed')) return;
+        this.updateGradientAnimations();
         
-        const fill = el.getAttribute('fill');
-        const idMatch = fill.match(/url\(#([^)]+)\)/);
-        if (!idMatch) return;
+        setTimeout(() => {
+            this.applyBorders();
+            this.processRectColors();
+            this.processGradients();
+        }, 0);
         
-        const gradient = document.getElementById(idMatch[1]);
-        if (!gradient) return;
-        
-        const stops = gradient.querySelectorAll('stop');
-        if (stops.length < 2) return;
-        
-        const getColor = (stop) => {
-            const style = stop.getAttribute('style');
-            if (style) {
-                const rgbMatch = style.match(/stop-color:\s*rgb\((\d+),\s*(\d+),\s*(\d+)\)/i);
-                if (rgbMatch) {
-                    return { r: parseInt(rgbMatch[1]), g: parseInt(rgbMatch[2]), b: parseInt(rgbMatch[3]) };
-                }
-            }
-            let color = stop.getAttribute('stop-color');
-            if (color) {
-                const hexMatch = color.match(/#([0-9a-fA-F]{6})/);
-                if (hexMatch) {
-                    const hex = hexMatch[0];
-                    return {
-                        r: parseInt(hex.slice(1,3), 16),
-                        g: parseInt(hex.slice(3,5), 16),
-                        b: parseInt(hex.slice(5,7), 16)
-                    };
-                }
-            }
-            return null;
-        };
-        
-        let c1 = getColor(stops[0]);
-        let c2 = getColor(stops[1]);
-        let c3 = stops[2] ? getColor(stops[2]) : c1;
-        
-        if (!c1 || !c2) return;
-        
-        role.style.setProperty('border', `1px solid rgba(${c1.r}, ${c1.g}, ${c1.b}, 0.6)`);
-        if (this.settings.enableBackground) {
-            role.style.setProperty('background', `linear-gradient(to right, rgba(${c1.r}, ${c1.g}, ${c1.b}, 0.153), rgba(${c2.r}, ${c2.g}, ${c2.b}, 0.153), rgba(${c3.r}, ${c3.g}, ${c3.b}, 0.153))`);
-        } else {
-            role.style.setProperty('background', 'rgba(0, 0, 0, 0)');
-            role.style.setProperty('background-color', 'transparent');
-            role.style.setProperty('background-image', 'none');
-        }
-        
-        role.setAttribute('data-gradient-processed', 'true');
-    });
-}
-
-start() {
-    if (!styleElement) {
-        styleElement = document.createElement('style');
-        styleElement.id = 'oldroles-styles';
-        styleElement.textContent = baseCSS;
-        document.head.appendChild(styleElement);
+        this.observer = new MutationObserver(() => {
+            this.applyBorders();
+            this.processRectColors();
+            this.processGradients();
+        });
+        this.observer.observe(document.body, { childList: true, subtree: true });
     }
 
-    const allRoles = document.querySelectorAll(this.roleSelector);
-    allRoles.forEach(role => {
-        role.style.border = '';
-        role.style.backgroundColor = '';
-        role.style.background = '';
-        role.style.backgroundImage = '';
-        role.removeAttribute('data-border-colorful');
-        role.removeAttribute('data-gradient-processed');
-        role.removeAttribute('data-gradient-id');
-    });
-    
-    try {
-        const saved = betterdiscord.Data.load('settings');
-        if (saved) this.settings = Object.assign(this.settings, saved);
-    } catch(e) {}
-    
-    this.updateGradientAnimations();
-    
-    setTimeout(() => {
-        this.applyBorders();
-        this.processRectColors();
-        this.processGradients();
-    }, 0);
-    
-    this.observer = new MutationObserver(() => {
-        this.applyBorders();
-        this.processRectColors();
-        this.processGradients();
-    });
-    this.observer.observe(document.body, { childList: true, subtree: true });
-}
-
-stop() {
-    if (this.gradientStyles) {
-        this.gradientStyles.forEach(style => style.remove());
-        this.gradientStyles = [];
+    stop() {
+        if (this.gradientStyles) {
+            this.gradientStyles.forEach(style => style.remove());
+            this.gradientStyles = [];
+        }
+        if (styleElement) styleElement.remove();
+        if (this.animationStyleElement) this.animationStyleElement.remove();
+        if (this.observer) this.observer.disconnect();
+        if (this.hoverObserver) this.hoverObserver.disconnect();
+        styleElement = null;
+        this.animationStyleElement = null;
     }
-    if (styleElement) styleElement.remove();
-    if (this.animationStyleElement) this.animationStyleElement.remove();
-    if (this.observer) this.observer.disconnect();
-    styleElement = null;
-    this.animationStyleElement = null;
-}
 
-getSettingsPanel() {
-    if (!FormSwitch) {
-        FormSwitch = betterdiscord.Webpack.getBulk({
-            filter: betterdiscord.Webpack.Filters.byStrings('"data-toggleable-component":"switch"', 'layout:"horizontal"'),
-            searchExports: true
-        })[0];
-    }
+    getSettingsPanel() {
+        if (!FormSwitch) {
+            FormSwitch = betterdiscord.Webpack.getBulk({
+                filter: betterdiscord.Webpack.Filters.byStrings('"data-toggleable-component":"switch"', 'layout:"horizontal"'),
+                searchExports: true
+            })[0];
+        }
     
     return react.createElement(() => {
         const [state, setState] = react.useState(this.settings.enableBackground);
@@ -776,35 +799,35 @@ getSettingsPanel() {
                     betterdiscord.Data.save('settings', this.settings);
 
                     if (v) {
-        this.updateGradientAnimations();
-    } else {
-        if (this.animationStyleElement) {
-            this.animationStyleElement.remove();
-            this.animationStyleElement = null;
-        }
-    }
+                this.updateGradientAnimations();
+            } else {
+                if (this.animationStyleElement) {
+                    this.animationStyleElement.remove();
+                    this.animationStyleElement = null;
+                }
+            }
                     
-    const roles = document.querySelectorAll('.role_af3987, .role__48c1c, .role__5d7c9');
-    roles.forEach(role => {
-        role.style.removeProperty('border');
-        role.style.removeProperty('background');
-        role.style.removeProperty('background-color');
-        role.style.removeProperty('background-image');
-        role.removeAttribute('data-gradient-processed');
-        role.removeAttribute('data-border-colorful');
-        role.removeAttribute('data-gradient-id');
-    });
+                const roles = document.querySelectorAll('.role_af3987, .role__48c1c, .role__5d7c9');
+                roles.forEach(role => {
+                    role.style.removeProperty('border');
+                    role.style.removeProperty('background');
+                    role.style.removeProperty('background-color');
+                    role.style.removeProperty('background-image');
+                    role.removeAttribute('data-gradient-processed');
+                    role.removeAttribute('data-border-colorful');
+                    role.removeAttribute('data-gradient-id');
+                });
                     
                     if (this.gradientStyles) {
                         this.gradientStyles.forEach(style => style.remove());
                         this.gradientStyles = [];
                     }
 
-                        setTimeout(() => {
-        this.processGradients();
-        this.applyBorders();
-        this.processRectColors();
-    }, 0);
+                setTimeout(() => {
+                    this.processGradients();
+                    this.applyBorders();
+                    this.processRectColors();
+                }, 0);
                     
                     this.processGradients();
                 }
