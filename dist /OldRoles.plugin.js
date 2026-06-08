@@ -2,7 +2,7 @@
  * @name OldRoles
  * @author KhimarikMayer
  * @description A full accurate restoration of Discord's roles layout, which used from 2017 to 08.2021 (to 09.2022, because then the styles of border roles were still don't removed since 08.2021).
- * @version 1.0
+ * @version 1.1
  */
 
 const betterdiscord = new BdApi("OldRoles");
@@ -28,6 +28,9 @@ const baseCSS = `
 .full-motion.app-focused:not(.hardware-acceleration-disabled) .role_af3987:has(.dotBorderColor__4f569[fill^="url(#dotGradient"]):hover,
 .full-motion.app-focused:not(.hardware-acceleration-disabled) .role__48c1c:has(.dotBorderColor__4f569[fill^="url(#dotGradient"]):hover,
 .full-motion.app-focused:not(.hardware-acceleration-disabled) .role__5d7c9:has(.dotBorderColor__4f569[fill^="url(#dotGradient"]):hover { animation: oldrolesGradientAnimation 2.5s linear infinite; background-size: 200% 100% !important; }
+.role__48c1c {
+    border-radius: 11px;
+}
 .roleDot_af3987 {
     font-size: 1.34em;
 }
