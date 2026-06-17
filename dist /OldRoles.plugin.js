@@ -2,7 +2,7 @@
  * @name OldRoles
  * @author KhimarikMayer
  * @description A full accurate restoration of Discord's roles layout, which used from 2017 to 08.2021 (to 09.2022, because then the styles of border roles were still don't removed since 08.2021).
- * @version 1.1
+ * @version 1.2
  */
 
 const betterdiscord = new BdApi("OldRoles");
@@ -781,7 +781,7 @@ updateGradients() {
     getSettingsPanel() {
         if (!FormSwitch) {
             FormSwitch = betterdiscord.Webpack.getBulk({
-                filter: betterdiscord.Webpack.Filters.byStrings('"data-toggleable-component":"switch"', 'layout:"horizontal"'),
+                filter: betterdiscord.Webpack.Filters.byStrings("hasIcon", "switchIconsEnabled"),
                 searchExports: true
             })[0];
         }
