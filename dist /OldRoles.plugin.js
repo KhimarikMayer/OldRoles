@@ -141,6 +141,7 @@ const baseCSS = `
     margin-left: 4px;
 }
 .role_af3987 {
+	border-radius: 11px;
     min-height: 22px !important;
     height: 22px !important;
 }
